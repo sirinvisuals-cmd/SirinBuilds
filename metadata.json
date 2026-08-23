@@ -1,0 +1,6 @@
+{
+  "name": "SirinBuilds",
+  "description": "Building Digital Success — Modern website development, web hosting, e-commerce platforms, and high-performance digital solutions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
