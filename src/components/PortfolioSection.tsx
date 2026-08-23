@@ -89,6 +89,10 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ onOpenQuoteM
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    const fallbackSvg = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" fill="%230F172A"><rect width="800" height="450" fill="%230B132B"/><circle cx="400" cy="160" r="30" fill="%2314B8A6" opacity="0.2"/><text x="400" y="230" fill="%2338BDF8" font-size="24" font-weight="bold" text-anchor="middle" font-family="system-ui,sans-serif">${encodeURIComponent(project.title)}</text><text x="400" y="265" fill="%2394A3B8" font-size="15" text-anchor="middle" font-family="system-ui,sans-serif">${encodeURIComponent(project.category)}</text></svg>`;
+                    e.currentTarget.src = fallbackSvg;
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent opacity-60" />
 
@@ -235,6 +239,10 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ onOpenQuoteM
                     alt={selectedProject.title}
                     className="w-full h-full object-cover"
                     referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      const fallbackSvg = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" fill="%230F172A"><rect width="800" height="450" fill="%230B132B"/><circle cx="400" cy="160" r="30" fill="%2314B8A6" opacity="0.2"/><text x="400" y="230" fill="%2338BDF8" font-size="24" font-weight="bold" text-anchor="middle" font-family="system-ui,sans-serif">${encodeURIComponent(selectedProject.title)}</text><text x="400" y="265" fill="%2394A3B8" font-size="15" text-anchor="middle" font-family="system-ui,sans-serif">${encodeURIComponent(selectedProject.category)}</text></svg>`;
+                      e.currentTarget.src = fallbackSvg;
+                    }}
                   />
                 </div>
               </div>

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { BRAND } from '../data/content';
+import heroBannerImg from '../assets/images/sirinbuilds_banner_1787494701568.jpg';
 
 interface HeroProps {
   onOpenQuoteModal: (packageId?: string) => void;
@@ -159,10 +160,17 @@ export const Hero: React.FC<HeroProps> = ({ onOpenQuoteModal }) => {
                 {/* Curved Organic Framed Showcase */}
                 <div className="relative aspect-square sm:aspect-[4/3] lg:aspect-square w-full rounded-2xl overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-[#042F2E]">
                   <img
-                    src="/src/assets/images/sirinbuilds_banner_1787494701568.jpg"
+                    src={heroBannerImg}
                     alt="SirinBuilds Digital Architecture & Cloud Hosting Banner"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
                     referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      // Fallback to public folder path if direct import is unreachable in custom static subfolder hosting
+                      const target = e.currentTarget;
+                      if (!target.src.includes('hero-banner.jpg')) {
+                        target.src = '/hero-banner.jpg';
+                      }
+                    }}
                   />
                   
                   {/* Subtle Gradient Vignette */}

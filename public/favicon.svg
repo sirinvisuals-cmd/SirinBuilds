@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+  <rect width="36" height="36" rx="8" fill="#0B132B" />
+  <path d="M26 9.5H13C10.5147 9.5 8.5 11.5147 8.5 14V14.5C8.5 16.9853 10.5147 19 13 19H23C25.4853 19 27.5 21.0147 27.5 23.5V24C27.5 26.4853 25.4853 28.5 23 28.5H10" stroke="url(#sirin-fav-grad)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="26" cy="9.5" r="2.2" fill="#38BDF8" />
+  <circle cx="10" cy="28.5" r="2.2" fill="#14B8A6" />
+  <defs>
+    <linearGradient id="sirin-fav-grad" x1="8.5" y1="9.5" x2="27.5" y2="28.5" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#38BDF8" />
+      <stop offset="0.55" stop-color="#14B8A6" />
+      <stop offset="1" stop-color="#0EA5E9" />
+    </linearGradient>
+  </defs>
+</svg>
