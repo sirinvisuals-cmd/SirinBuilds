@@ -1,9 +1,11 @@
 import React from 'react';
 import { Sparkles, CheckCircle2 } from 'lucide-react';
-import { PROCESS_STEPS } from '../data/content';
+import { useContent } from '../context/ContentContext';
 import { IconHelper } from './IconHelper';
 
 export const ProcessSection: React.FC = () => {
+  const { content } = useContent();
+  const processSteps = content.processSteps || [];
   return (
     <section id="process" className="py-20 lg:py-24 bg-[#F8FAFC] relative overflow-hidden">
       {/* Background ambient light */}
@@ -25,10 +27,10 @@ export const ProcessSection: React.FC = () => {
           </p>
         </div>
 
-        {/* 6 Steps Grid */}
+        {/* Steps Grid */}
         <div className="w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 text-left">
-            {PROCESS_STEPS.map((stepItem) => {
+            {processSteps.map((stepItem) => {
               return (
                 <div
                   key={stepItem.step}

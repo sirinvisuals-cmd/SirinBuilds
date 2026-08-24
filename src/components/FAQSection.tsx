@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { ChevronDown, HelpCircle, MessageCircle } from 'lucide-react';
-import { FAQS, BRAND } from '../data/content';
+import { useContent } from '../context/ContentContext';
 
 export const FAQSection: React.FC = () => {
   const [openId, setOpenId] = useState<string | null>('timeframe');
   const [activeCategory, setActiveCategory] = useState<string>('All');
+  const { content } = useContent();
+  const faqsList = content.faqs || [];
 
-  const categories = ['All', 'Process', 'Pricing & Hosting', 'Technical'];
+  const dynamicCategories = ['All', ...Array.from(new Set(faqsList.map((f) => f.category).filter(Boolean)))];
 
   const filteredFaqs = activeCategory === 'All'
-    ? FAQS
-    : FAQS.filter((f) => f.category === activeCategory);
+    ? faqsList
+    : faqsList.filter((f) => f.category === activeCategory);
 
   const toggleAccordion = (id: string) => {
     setOpenId(openId === id ? null : id);
@@ -36,7 +38,7 @@ export const FAQSection: React.FC = () => {
 
           {/* Category tabs */}
           <div className="flex flex-wrap justify-center gap-2 mt-6">
-            {categories.map((cat) => (
+            {dynamicCategories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
@@ -104,12 +106,12 @@ export const FAQSection: React.FC = () => {
             </div>
             <div>
               <div className="text-sm font-bold text-slate-900">Have a specific question not covered here?</div>
-              <div className="text-xs text-slate-500">Our team responds directly at {BRAND.email}</div>
+              <div className="text-xs text-slate-500">Our team responds directly at {content.brand.email}</div>
             </div>
           </div>
 
           <a
-            href={`mailto:${BRAND.email}?subject=Question%20about%20SirinBuilds%20Services`}
+            href={`mailto:${content.brand.email}?subject=Question%20about%20SirinBuilds%20Services`}
             className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-colors shrink-0"
           >
             Email Support

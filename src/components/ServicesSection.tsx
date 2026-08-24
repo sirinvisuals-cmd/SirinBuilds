@@ -6,7 +6,7 @@ import {
   Clock,
   CheckCircle2,
 } from 'lucide-react';
-import { SERVICES } from '../data/content';
+import { useContent } from '../context/ContentContext';
 import { ServiceItem } from '../types';
 import { IconHelper } from './IconHelper';
 
@@ -16,12 +16,18 @@ interface ServicesSectionProps {
 
 export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectService }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const { content } = useContent();
+  const servicesList = content.services || [];
 
-  const categories = ['All', 'Development', 'UI/UX', 'Infrastructure', 'Growth', 'Branding', 'Support', 'Engineering'];
+  const categoriesSet = new Set<string>();
+  servicesList.forEach((s) => {
+    if (s.category) categoriesSet.add(s.category);
+  });
+  const categories: string[] = ['All', ...Array.from(categoriesSet)];
 
   const filteredServices = selectedCategory === 'All'
-    ? SERVICES
-    : SERVICES.filter((s) => s.category.toLowerCase() === selectedCategory.toLowerCase());
+    ? servicesList
+    : servicesList.filter((s) => s.category.toLowerCase() === selectedCategory.toLowerCase());
 
   return (
     <section id="services" className="py-24 bg-[#F8FAFC] relative">

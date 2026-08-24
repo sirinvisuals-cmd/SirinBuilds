@@ -1,9 +1,12 @@
 import React from 'react';
 import { Zap, Award, Check } from 'lucide-react';
-import { WHY_CHOOSE_US } from '../data/content';
+import { useContent } from '../context/ContentContext';
 import { IconHelper } from './IconHelper';
 
 export const WhySirinBuilds: React.FC = () => {
+  const { content } = useContent();
+  const whyPoints = content.whyChoosePoints || [];
+
   return (
     <section id="why-us" className="py-24 bg-white relative border-t border-slate-200/90 overflow-hidden">
       {/* Glow elements */}
@@ -18,16 +21,16 @@ export const WhySirinBuilds: React.FC = () => {
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
-            Why Choose SirinBuilds?
+            Why Choose {content.brand.name}?
           </h2>
           <p className="text-base sm:text-lg text-slate-600">
             We combine modern engineering, transparent pricing, and unwavering reliability to deliver digital platforms that actually perform.
           </p>
         </div>
 
-        {/* 4 Feature Cards Grid */}
+        {/* Feature Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 text-left">
-          {WHY_CHOOSE_US.map((item) => {
+          {whyPoints.map((item) => {
             return (
               <div
                 key={item.id}

@@ -1,8 +1,11 @@
 import React from 'react';
 import { Zap, ShieldCheck, Smartphone, Headphones } from 'lucide-react';
-import { VALUE_POINTS } from '../data/content';
+import { useContent } from '../context/ContentContext';
 
 export const TrustBar: React.FC = () => {
+  const { content } = useContent();
+  const valuePoints = content.valuePoints || [];
+
   const getIcon = (name: string) => {
     switch (name) {
       case 'Zap':
@@ -22,7 +25,7 @@ export const TrustBar: React.FC = () => {
     <section className="relative py-8 bg-white border-y border-slate-200/90">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-          {VALUE_POINTS.map((point, index) => (
+          {valuePoints.map((point, index) => (
             <div
               key={index}
               className="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-teal-400 hover:bg-teal-50/30 transition-all duration-300 group shadow-sm"

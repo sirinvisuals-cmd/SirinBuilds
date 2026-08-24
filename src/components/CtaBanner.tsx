@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
+import { useContent } from '../context/ContentContext';
 
 interface CtaBannerProps {
   onOpenQuoteModal: () => void;
@@ -7,6 +8,9 @@ interface CtaBannerProps {
 }
 
 export const CtaBanner: React.FC<CtaBannerProps> = ({ onOpenQuoteModal, onContactClick }) => {
+  const { content } = useContent();
+  const cta = content.ctaBanner;
+
   return (
     <section className="py-20 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
@@ -19,15 +23,15 @@ export const CtaBanner: React.FC<CtaBannerProps> = ({ onOpenQuoteModal, onContac
           <div className="relative z-10 max-w-3xl mx-auto text-center space-y-6">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 border border-white/25 text-teal-100 text-xs font-semibold uppercase tracking-wider backdrop-blur-sm">
               <Sparkles className="w-3.5 h-3.5 text-teal-200" />
-              <span>Let's Create Something Extraordinary</span>
+              <span>{cta.badge || "Let's Create Something Extraordinary"}</span>
             </div>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-              Ready to Build Your Website?
+              {cta.title || 'Ready to Build Your Website?'}
             </h2>
 
             <p className="text-base sm:text-lg text-teal-100 max-w-xl mx-auto leading-relaxed">
-              Let's turn your idea into a professional digital experience.
+              {cta.description || "Let's turn your idea into a professional digital experience."}
             </p>
 
             <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
@@ -36,7 +40,7 @@ export const CtaBanner: React.FC<CtaBannerProps> = ({ onOpenQuoteModal, onContac
                 id="cta-banner-get-started"
                 className="px-8 py-4 rounded-2xl bg-white text-slate-950 font-bold text-base shadow-xl hover:bg-teal-50 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 group"
               >
-                <span>Get Started</span>
+                <span>{cta.primaryBtn || 'Get Started'}</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform text-teal-700" />
               </button>
 
@@ -45,7 +49,7 @@ export const CtaBanner: React.FC<CtaBannerProps> = ({ onOpenQuoteModal, onContac
                 id="cta-banner-contact-us"
                 className="px-8 py-4 rounded-2xl bg-white/10 border border-white/30 hover:bg-white/20 text-white font-semibold text-base transition-all flex items-center gap-2 backdrop-blur-sm"
               >
-                <span>Contact Us</span>
+                <span>{cta.secondaryBtn || 'Contact Us'}</span>
               </button>
             </div>
           </div>

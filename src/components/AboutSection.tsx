@@ -11,12 +11,16 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
+import { useContent } from '../context/ContentContext';
 
 interface AboutSectionProps {
   onContactClick: () => void;
 }
 
 export const AboutSection: React.FC<AboutSectionProps> = ({ onContactClick }) => {
+  const { content } = useContent();
+  const aboutData = content.about;
+
   const pillars = [
     {
       title: 'Quality',
@@ -70,11 +74,11 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onContactClick }) =>
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">
-            About SirinBuilds
+            About {content.brand.name}
           </h2>
 
           <p className="text-lg sm:text-xl text-slate-700 leading-relaxed font-normal">
-            SirinBuilds helps individuals, startups and businesses establish a strong digital presence through modern websites, hosting and digital solutions.
+            {aboutData.mission || `${content.brand.name} helps individuals, startups and businesses establish a strong digital presence through modern websites, hosting and digital solutions.`}
           </p>
         </div>
 
@@ -87,11 +91,11 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onContactClick }) =>
             </h3>
 
             <p className="text-sm text-slate-600 leading-relaxed">
-              We believe a website is the cornerstone of any modern brand. Rather than relying on slow, bloated website builders or generic cookie-cutter templates, SirinBuilds develops clean, high-performance web systems tailored to your exact business objectives.
+              {aboutData.storyParagraph1 || 'We believe a website is the cornerstone of any modern brand. Rather than relying on slow, bloated website builders or generic cookie-cutter templates, we develop clean, high-performance web systems tailored to your exact business objectives.'}
             </p>
 
             <p className="text-sm text-slate-600 leading-relaxed">
-              From individual professionals launching personal portfolios to established organizations scaling their digital reach, we provide the technical craftsmanship, cloud infrastructure, and dedicated post-launch care required for real online success.
+              {aboutData.storyParagraph2 || 'From individual professionals launching personal portfolios to established organizations scaling their digital reach, we provide the technical craftsmanship, cloud infrastructure, and dedicated post-launch care required for real online success.'}
             </p>
 
             <div className="pt-4 border-t border-slate-200 flex items-center gap-4">

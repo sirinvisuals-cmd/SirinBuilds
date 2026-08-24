@@ -1,18 +1,24 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   Mail,
   Instagram,
   Youtube,
   ArrowUp,
+  Sliders,
+  Shield,
 } from 'lucide-react';
-import { BRAND } from '../data/content';
+import { useContent } from '../context/ContentContext';
 import { BrandLogo } from './BrandLogo';
 
 interface FooterProps {
   onSelectPackage?: (packageId?: string) => void;
+  onOpenAdmin?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = () => {
+export const Footer: React.FC<FooterProps> = ({ onOpenAdmin }) => {
+  const { content } = useContent();
+  const lastTapRef = useRef<number>(0);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -22,6 +28,25 @@ export const Footer: React.FC<FooterProps> = () => {
     const el = document.getElementById(sectionId);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  // Double tap handler for touch devices (e.g. mobile)
+  const handleTouchEnd = () => {
+    const now = Date.now();
+    const DOUBLE_TAP_DELAY = 350;
+    if (now - lastTapRef.current < DOUBLE_TAP_DELAY) {
+      if (onOpenAdmin) {
+        onOpenAdmin();
+      }
+    }
+    lastTapRef.current = now;
+  };
+
+  // Double click handler for desktop mice
+  const handleDoubleClick = () => {
+    if (onOpenAdmin) {
+      onOpenAdmin();
     }
   };
 
@@ -47,7 +72,7 @@ export const Footer: React.FC<FooterProps> = () => {
               
               <div className="flex flex-wrap items-center gap-3">
                 <a
-                  href={BRAND.instagramUrl}
+                  href={content.brand.instagramUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-3 py-1.5 rounded-xl bg-white border border-slate-200 flex items-center gap-2 text-slate-700 hover:text-pink-600 hover:border-pink-300 transition-colors text-xs font-semibold shadow-sm"
@@ -59,7 +84,7 @@ export const Footer: React.FC<FooterProps> = () => {
                 </a>
 
                 <a
-                  href={BRAND.youtubeUrl}
+                  href={content.brand.youtubeUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-3 py-1.5 rounded-xl bg-white border border-slate-200 flex items-center gap-2 text-slate-700 hover:text-red-600 hover:border-red-300 transition-colors text-xs font-semibold shadow-sm"
@@ -71,7 +96,7 @@ export const Footer: React.FC<FooterProps> = () => {
                 </a>
 
                 <a
-                  href={`mailto:${BRAND.email}`}
+                  href={`mailto:${content.brand.email}`}
                   className="px-3 py-1.5 rounded-xl bg-white border border-slate-200 flex items-center gap-2 text-slate-700 hover:text-teal-700 hover:border-teal-300 transition-colors text-xs font-semibold shadow-sm"
                   aria-label="SirinBuilds Email"
                 >
@@ -216,11 +241,11 @@ export const Footer: React.FC<FooterProps> = () => {
               </li>
               <li className="pt-2">
                 <a
-                  href={`mailto:${BRAND.email}`}
+                  href={`mailto:${content.brand.email}`}
                   className="inline-flex items-center gap-1.5 text-teal-700 hover:text-teal-800 font-mono text-xs font-semibold"
                 >
                   <Mail className="w-3.5 h-3.5" />
-                  <span>{BRAND.email}</span>
+                  <span>{content.brand.email}</span>
                 </a>
               </li>
             </ul>
@@ -228,16 +253,37 @@ export const Footer: React.FC<FooterProps> = () => {
 
         </div>
 
-        {/* Bottom Bar: Copyright & Back to Top */}
+        {/* Bottom Bar: Copyright, Admin Button & Back to Top */}
         <div className="pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-          <p className="text-slate-500">
-            © {BRAND.year} <strong className="text-slate-900">SirinBuilds</strong>. All rights reserved. Building Digital Success.
+          <p className="text-slate-500 flex items-center flex-wrap gap-1">
+            <span>© {content.brand.year}</span>
+            {/* Last Sirinbuilds button with double-tap & double-click support */}
+            <button
+              type="button"
+              id="footer-last-sirinbuilds-btn"
+              onClick={handleDoubleClick}
+              onDoubleClick={handleDoubleClick}
+              onTouchEnd={handleTouchEnd}
+              title="Double tap or double click to open Admin Panel"
+              className="font-bold text-slate-900 hover:text-teal-700 transition-colors cursor-pointer px-1 py-0.5 rounded hover:bg-slate-200/60 active:scale-95 inline-flex items-center gap-1 focus:outline-none"
+            >
+              <span>{content.brand.name}</span>
+            </button>
+            <span>. All rights reserved. {content.brand.tagline}.</span>
           </p>
 
-          <div className="flex items-center gap-6">
-            <div className="text-slate-500 flex items-center gap-1">
-              <span>Fast • Secure • Modern</span>
-            </div>
+          <div className="flex flex-wrap items-center gap-3 sm:gap-5">
+            {/* Dedicated Admin Panel Trigger Button */}
+            <button
+              type="button"
+              id="footer-admin-panel-btn"
+              onClick={onOpenAdmin}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-teal-300 hover:text-teal-200 text-xs font-semibold shadow-sm transition-all border border-slate-800 hover:border-teal-500/40"
+              title="Open SirinBuilds Content Admin Panel"
+            >
+              <Sliders className="w-3.5 h-3.5 text-teal-400" />
+              <span>Admin Panel</span>
+            </button>
 
             <button
               onClick={scrollToTop}

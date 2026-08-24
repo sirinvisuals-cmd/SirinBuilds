@@ -14,7 +14,7 @@ import {
   CloudUpload,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
-import { BRAND } from '../data/content';
+import { useContent } from '../context/ContentContext';
 import heroBannerImg from '../assets/images/sirinbuilds_banner_1787494701568.jpg';
 
 interface HeroProps {
@@ -23,6 +23,7 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ onOpenQuoteModal }) => {
   const { t } = useLanguage();
+  const { content } = useContent();
 
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
@@ -60,7 +61,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenQuoteModal }) => {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-teal-600"></span>
             </span>
-            <span>{t('hero.pill', 'Website Development • Web Hosting • Domains • Support')}</span>
+            <span>{content.hero.badge || t('hero.pill', 'Website Development • Web Hosting • Domains • Support')}</span>
           </div>
         </div>
 
@@ -75,7 +76,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenQuoteModal }) => {
               {/* Celestial Sparkle Accent */}
               <div className="flex items-center gap-2 text-teal-600">
                 <span className="text-lg">✦</span>
-                <span className="text-xs font-mono font-bold tracking-widest uppercase text-slate-500">Premium Digital Agency</span>
+                <span className="text-xs font-mono font-bold tracking-widest uppercase text-slate-500">{content.brand.businessType || 'Premium Digital Agency'}</span>
               </div>
 
               {/* Bold Main Headline: SIRIN BUILDS */}
@@ -88,7 +89,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenQuoteModal }) => {
                 <div className="flex items-center gap-3 mt-4">
                   <div className="h-[1.5px] w-10 sm:w-16 bg-gradient-to-r from-teal-600 to-cyan-500" />
                   <p className="text-xs sm:text-sm font-bold tracking-[0.28em] text-slate-800 uppercase">
-                    {t('hero.tagline', 'BUILDING DIGITAL SUCCESS')}
+                    {content.brand.tagline || t('hero.tagline', 'BUILDING DIGITAL SUCCESS')}
                   </p>
                   <div className="h-[1.5px] w-10 sm:w-16 bg-gradient-to-r from-cyan-500 to-teal-600" />
                 </div>
@@ -96,7 +97,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenQuoteModal }) => {
 
               {/* Description */}
               <p className="text-base sm:text-lg text-slate-600 font-normal leading-relaxed max-w-xl">
-                {t('hero.desc', 'We build fast, secure and modern websites, high-speed web hosting, domain infrastructure, and dedicated technical solutions that help your business thrive online.')}
+                {content.hero.description || t('hero.desc', 'We build fast, secure and modern websites, high-speed web hosting, domain infrastructure, and dedicated technical solutions that help your business thrive online.')}
               </p>
 
               {/* 4 Core Pillars matching banner: WEBSITES | HOSTING | DOMAINS | SUPPORT */}
@@ -137,7 +138,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenQuoteModal }) => {
                   id="hero-primary-cta"
                   className="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-teal-600 via-teal-500 to-cyan-600 text-white font-bold text-base shadow-lg shadow-teal-700/20 hover:shadow-teal-700/30 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 group"
                 >
-                  <span>{t('btn.getStarted', 'Get Started')}</span>
+                  <span>{content.hero.primaryCta || t('btn.getStarted', 'Get Started')}</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform text-cyan-100" />
                 </button>
 
@@ -146,7 +147,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenQuoteModal }) => {
                   id="hero-secondary-cta"
                   className="w-full sm:w-auto px-7 py-4 rounded-xl bg-white border border-slate-300 hover:border-teal-500 text-slate-800 hover:text-teal-700 font-semibold text-base transition-all hover:bg-teal-50/30 flex items-center justify-center gap-2 shadow-sm"
                 >
-                  <span>{t('btn.viewServices', 'View Services')}</span>
+                  <span>{content.hero.secondaryCta || t('btn.viewServices', 'View Services')}</span>
                   <ChevronRight className="w-4 h-4 text-slate-400" />
                 </button>
               </div>
@@ -208,18 +209,30 @@ export const Hero: React.FC<HeroProps> = ({ onOpenQuoteModal }) => {
 
         {/* Quick Value Guarantees */}
         <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4 text-slate-700 text-xs sm:text-sm font-medium">
-          <div className="flex items-center justify-center gap-2 p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm">
-            <Smartphone className="w-4 h-4 text-teal-600 shrink-0" />
-            <span className="font-semibold text-slate-800">100% Mobile Ready</span>
-          </div>
-          <div className="flex items-center justify-center gap-2 p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm">
-            <ShieldCheck className="w-4 h-4 text-teal-600 shrink-0" />
-            <span className="font-semibold text-slate-800">Free SSL & Security</span>
-          </div>
-          <div className="flex items-center justify-center gap-2 p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm">
-            <Zap className="w-4 h-4 text-teal-600 shrink-0" />
-            <span className="font-semibold text-slate-800">Ultra-Fast PageSpeed</span>
-          </div>
+          {content.hero.stats && content.hero.stats.length === 3 ? (
+            content.hero.stats.map((stat, idx) => (
+              <div key={idx} className="flex flex-col items-center justify-center p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm text-center">
+                <div className="text-lg font-black text-slate-900 tracking-tight">{stat.value}</div>
+                <div className="text-xs font-bold text-slate-800 mt-0.5">{stat.label}</div>
+                <div className="text-[11px] text-slate-500">{stat.helper}</div>
+              </div>
+            ))
+          ) : (
+            <>
+              <div className="flex items-center justify-center gap-2 p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+                <Smartphone className="w-4 h-4 text-teal-600 shrink-0" />
+                <span className="font-semibold text-slate-800">100% Mobile Ready</span>
+              </div>
+              <div className="flex items-center justify-center gap-2 p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+                <ShieldCheck className="w-4 h-4 text-teal-600 shrink-0" />
+                <span className="font-semibold text-slate-800">Free SSL & Security</span>
+              </div>
+              <div className="flex items-center justify-center gap-2 p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+                <Zap className="w-4 h-4 text-teal-600 shrink-0" />
+                <span className="font-semibold text-slate-800">Ultra-Fast PageSpeed</span>
+              </div>
+            </>
+          )}
         </div>
 
       </div>

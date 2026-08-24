@@ -5,7 +5,7 @@ import {
   Plus,
   ArrowRight,
 } from 'lucide-react';
-import { ADD_ON_SERVICES } from '../data/content';
+import { useContent } from '../context/ContentContext';
 import { IconHelper } from './IconHelper';
 
 interface AddOnServicesProps {
@@ -19,9 +19,12 @@ export const AddOnServices: React.FC<AddOnServicesProps> = ({
   onToggleAddOn,
   onOpenQuoteModal,
 }) => {
+  const { content } = useContent();
+  const addOns = content.addOnServices || [];
+
   const selectedCount = selectedAddOns.length;
   const totalAddOnCost = selectedAddOns.reduce((sum, id) => {
-    const item = ADD_ON_SERVICES.find((a) => a.id === id);
+    const item = addOns.find((a) => a.id === id);
     return sum + (item ? item.priceINR : 0);
   }, 0);
 
@@ -68,7 +71,7 @@ export const AddOnServices: React.FC<AddOnServicesProps> = ({
 
         {/* Clickable Add-On Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {ADD_ON_SERVICES.map((item) => {
+          {addOns.map((item) => {
             const isSelected = selectedAddOns.includes(item.id);
 
             return (

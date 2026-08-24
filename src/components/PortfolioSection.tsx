@@ -10,7 +10,7 @@ import {
   Monitor,
   Tablet,
 } from 'lucide-react';
-import { PORTFOLIO_PROJECTS } from '../data/content';
+import { useContent } from '../context/ContentContext';
 import { PortfolioProject } from '../types';
 
 interface PortfolioSectionProps {
@@ -21,18 +21,18 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ onOpenQuoteM
   const [activeCategory, setActiveCategory] = useState<string>('All');
   const [selectedProject, setSelectedProject] = useState<PortfolioProject | null>(null);
   const [devicePreview, setDevicePreview] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
+  const { content } = useContent();
+  const portfolioProjects = content.portfolioProjects || [];
 
-  const categories = [
-    'All',
-    'Business Websites',
-    'Landing Pages',
-    'Web Applications',
-    'Branding',
-  ];
+  const categoriesSet = new Set<string>();
+  portfolioProjects.forEach((p) => {
+    if (p.category) categoriesSet.add(p.category);
+  });
+  const dynamicCategories: string[] = ['All', ...Array.from(categoriesSet)];
 
   const filteredProjects = activeCategory === 'All'
-    ? PORTFOLIO_PROJECTS
-    : PORTFOLIO_PROJECTS.filter((p) => p.category === activeCategory);
+    ? portfolioProjects
+    : portfolioProjects.filter((p) => p.category === activeCategory);
 
   return (
     <section id="portfolio" className="py-24 bg-white relative border-t border-slate-200/90">
@@ -56,7 +56,7 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ onOpenQuoteM
 
           {/* Filter Buttons */}
           <div className="flex flex-wrap justify-center gap-2 mt-8">
-            {categories.map((category) => (
+            {dynamicCategories.map((category) => (
               <button
                 key={category}
                 onClick={() => setActiveCategory(category)}

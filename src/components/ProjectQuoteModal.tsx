@@ -8,7 +8,7 @@ import {
   Send,
   CheckCircle2,
 } from 'lucide-react';
-import { PRICING_PACKAGES, ADD_ON_SERVICES, BRAND } from '../data/content';
+import { useContent } from '../context/ContentContext';
 
 interface ProjectQuoteModalProps {
   isOpen: boolean;
@@ -25,6 +25,11 @@ export const ProjectQuoteModal: React.FC<ProjectQuoteModalProps> = ({
   selectedAddOns,
   onToggleAddOn,
 }) => {
+  const { content } = useContent();
+  const pricingPackages = content.pricingPackages || [];
+  const addOnServices = content.addOnServices || [];
+  const brand = content.brand;
+
   const [selectedPkgId, setSelectedPkgId] = useState<string>(defaultPackageId);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -41,11 +46,17 @@ export const ProjectQuoteModal: React.FC<ProjectQuoteModalProps> = ({
 
   if (!isOpen) return null;
 
-  const currentPkg = PRICING_PACKAGES.find((p) => p.id === selectedPkgId) || PRICING_PACKAGES[2];
+  const currentPkg = pricingPackages.find((p) => p.id === selectedPkgId) || pricingPackages[0] || {
+    id: 'starter',
+    name: 'Starter Package',
+    priceINR: 4999,
+    priceUSD: 69,
+    features: [],
+  };
   
   const baseCost = currentPkg.priceINR;
   const addOnsCost = selectedAddOns.reduce((acc, id) => {
-    const item = ADD_ON_SERVICES.find((a) => a.id === id);
+    const item = addOnServices.find((a) => a.id === id);
     return acc + (item ? item.priceINR : 0);
   }, 0);
 
@@ -58,13 +69,13 @@ export const ProjectQuoteModal: React.FC<ProjectQuoteModalProps> = ({
 
   const getMailtoLink = () => {
     const addOnNames = selectedAddOns
-      .map((id) => ADD_ON_SERVICES.find((a) => a.id === id)?.name)
+      .map((id) => addOnServices.find((a) => a.id === id)?.title)
       .filter(Boolean)
       .join(', ');
 
     const subject = encodeURIComponent(`Project Configuration: ${currentPkg.name} Plan from ${name || 'Client'}`);
     const body = encodeURIComponent(
-      `Hello SirinBuilds,\n\n` +
+      `Hello ${brand.name},\n\n` +
       `I would like to configure a project with the following details:\n\n` +
       `Package: ${currentPkg.name} (Base: ₹${baseCost.toLocaleString('en-IN')})\n` +
       `Selected Add-ons: ${addOnNames || 'None'} (+₹${addOnsCost.toLocaleString('en-IN')})\n` +
@@ -75,7 +86,7 @@ export const ProjectQuoteModal: React.FC<ProjectQuoteModalProps> = ({
       `Phone: ${phone || 'N/A'}\n\n` +
       `Additional Notes / Requirements:\n${notes || 'Standard package inclusions'}\n`
     );
-    return `mailto:${BRAND.email}?subject=${subject}&body=${body}`;
+    return `mailto:${brand.email}?subject=${subject}&body=${body}`;
   };
 
   return (
@@ -150,7 +161,7 @@ export const ProjectQuoteModal: React.FC<ProjectQuoteModalProps> = ({
                 1. Select Base Plan
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {PRICING_PACKAGES.map((pkg) => {
+                {pricingPackages.map((pkg) => {
                   const isSelected = selectedPkgId === pkg.id;
                   return (
                     <button
@@ -182,7 +193,7 @@ export const ProjectQuoteModal: React.FC<ProjectQuoteModalProps> = ({
                 2. Choose Modular Add-Ons
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {ADD_ON_SERVICES.map((item) => {
+                {addOnServices.map((item) => {
                   const isSelected = selectedAddOns.includes(item.id);
                   return (
                     <div

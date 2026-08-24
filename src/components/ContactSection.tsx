@@ -13,7 +13,7 @@ import {
   Building,
   User,
 } from 'lucide-react';
-import { BRAND, SERVICES } from '../data/content';
+import { useContent } from '../context/ContentContext';
 import { ContactFormData } from '../types';
 import { Toast } from './Toast';
 
@@ -28,6 +28,10 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   initialPackage = '',
   selectedAddOns = [],
 }) => {
+  const { content } = useContent();
+  const brand = content.brand;
+  const servicesList = content.services || [];
+
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
     email: '',
@@ -62,7 +66,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
 
   const copyEmailToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(BRAND.email);
+      await navigator.clipboard.writeText(brand.email);
       setCopiedEmail(true);
       setTimeout(() => setCopiedEmail(false), 2500);
     } catch (e) {
@@ -106,7 +110,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   const generateMailtoLink = () => {
     const subject = encodeURIComponent(`New Project Enquiry from ${formData.name || 'Client'}`);
     const body = encodeURIComponent(
-      `Hi SirinBuilds Team,\n\n` +
+      `Hi ${brand.name} Team,\n\n` +
       `Name: ${formData.name}\n` +
       `Email: ${formData.email}\n` +
       `Phone: ${formData.phone || 'N/A'}\n` +
@@ -116,7 +120,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
       (formData.selectedPackage ? `Selected Plan: ${formData.selectedPackage}\n` : '') +
       `\nProject Details:\n${formData.message}\n`
     );
-    return `mailto:${BRAND.email}?subject=${subject}&body=${body}`;
+    return `mailto:${brand.email}?subject=${subject}&body=${body}`;
   };
 
   return (
@@ -162,7 +166,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                 </div>
                 <div>
                   <div className="text-xs text-slate-500 font-mono">Official Email</div>
-                  <div className="text-base font-bold text-slate-900">{BRAND.email}</div>
+                  <div className="text-base font-bold text-slate-900">{brand.email}</div>
                 </div>
               </div>
 
@@ -185,7 +189,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                 </button>
 
                 <a
-                  href={`mailto:${BRAND.email}`}
+                  href={`mailto:${brand.email}`}
                   className="py-2.5 px-4 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm"
                 >
                   <span>Open Mail</span>
@@ -213,13 +217,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                     <div className="min-w-0">
                       <div className="text-[11px] text-slate-500 font-mono">Instagram</div>
                       <div className="text-xs font-bold text-slate-900 group-hover:text-pink-600 transition-colors truncate">
-                        {BRAND.instagram}
+                        {brand.instagram}
                       </div>
                     </div>
                   </div>
 
                   <a
-                    href={BRAND.instagramUrl}
+                    href={brand.instagramUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full py-2 px-3 rounded-xl bg-pink-50 hover:bg-pink-100 text-pink-700 border border-pink-200 text-xs font-bold flex items-center justify-center gap-1.5 transition-all"
@@ -238,13 +242,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                     <div className="min-w-0">
                       <div className="text-[11px] text-slate-500 font-mono">YouTube</div>
                       <div className="text-xs font-bold text-slate-900 group-hover:text-red-600 transition-colors truncate">
-                        {BRAND.youtube}
+                        {brand.youtube}
                       </div>
                     </div>
                   </div>
 
                   <a
-                    href={BRAND.youtubeUrl}
+                    href={brand.youtubeUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full py-2 px-3 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs font-bold flex items-center justify-center gap-1.5 transition-all"
@@ -421,7 +425,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                         onChange={(e) => setFormData({ ...formData, service: e.target.value })}
                         className="w-full px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-sm text-slate-900 focus:border-teal-500 focus:outline-none transition-colors"
                       >
-                        {SERVICES.map((s) => (
+                        {servicesList.map((s) => (
                           <option key={s.id} value={s.title}>
                             {s.title}
                           </option>

@@ -74,6 +74,70 @@ export interface FAQItem {
   category: 'General' | 'Process' | 'Pricing & Hosting' | 'Technical';
 }
 
+export interface AppBrand {
+  name: string;
+  tagline: string;
+  businessType: string;
+  email: string;
+  phone: string;
+  instagram: string;
+  instagramUrl: string;
+  youtube: string;
+  youtubeUrl: string;
+  year: string;
+}
+
+export interface AppHero {
+  badge: string;
+  titleLine1: string;
+  titleHighlight: string;
+  titleLine2: string;
+  description: string;
+  primaryCta: string;
+  secondaryCta: string;
+  stats: Array<{ label: string; value: string; helper: string }>;
+}
+
+export interface AppTrustPoint {
+  title: string;
+  desc: string;
+  icon: string;
+  badge: string;
+}
+
+export interface AppAbout {
+  badge: string;
+  title: string;
+  subtitle: string;
+  mainStory: string;
+  visionStory: string;
+  highlights: string[];
+  stats: Array<{ label: string; value: string; desc: string }>;
+}
+
+export interface AppCtaBanner {
+  badge: string;
+  title: string;
+  subtitle: string;
+  primaryBtnText: string;
+  secondaryBtnText: string;
+}
+
+export interface AppContent {
+  brand: AppBrand;
+  hero: AppHero;
+  trustPoints: AppTrustPoint[];
+  services: ServiceItem[];
+  whyChoosePoints: WhyChoosePoint[];
+  pricingPackages: PricingPackage[];
+  addOnServices: AddOnService[];
+  portfolioProjects: PortfolioProject[];
+  processSteps: ProcessStep[];
+  about: AppAbout;
+  faqs: FAQItem[];
+  ctaBanner: AppCtaBanner;
+}
+
 export interface ContactFormData {
   name: string;
   email: string;

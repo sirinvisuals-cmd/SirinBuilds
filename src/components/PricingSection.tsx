@@ -6,7 +6,7 @@ import {
   Flame,
   ShieldCheck,
 } from 'lucide-react';
-import { PRICING_PACKAGES } from '../data/content';
+import { useContent } from '../context/ContentContext';
 import { PricingPackage } from '../types';
 
 interface PricingSectionProps {
@@ -15,6 +15,8 @@ interface PricingSectionProps {
 
 export const PricingSection: React.FC<PricingSectionProps> = ({ onSelectPackage }) => {
   const [currency, setCurrency] = useState<'INR' | 'USD'>('INR');
+  const { content } = useContent();
+  const pricingPackages = content.pricingPackages || [];
 
   const formatPrice = (pkg: PricingPackage) => {
     if (pkg.isCustom) return 'Custom Pricing';
@@ -71,9 +73,9 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onSelectPackage 
           </div>
         </div>
 
-        {/* Pricing Cards Grid (5 Packages) */}
+        {/* Pricing Cards Grid (Packages) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch justify-center">
-          {PRICING_PACKAGES.map((pkg) => {
+          {pricingPackages.map((pkg) => {
             const isPopular = pkg.isPopular;
             const isEnterprise = pkg.isCustom;
 
