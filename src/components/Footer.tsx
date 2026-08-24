@@ -4,8 +4,6 @@ import {
   Instagram,
   Youtube,
   ArrowUp,
-  Sliders,
-  Shield,
 } from 'lucide-react';
 import { useContent } from '../context/ContentContext';
 import { BrandLogo } from './BrandLogo';
@@ -31,19 +29,20 @@ export const Footer: React.FC<FooterProps> = ({ onOpenAdmin }) => {
     }
   };
 
-  // Double tap handler for touch devices (e.g. mobile)
-  const handleTouchEnd = () => {
+  // Double tap & double click handler for mobile and desktop
+  const handleTap = () => {
     const now = Date.now();
-    const DOUBLE_TAP_DELAY = 350;
-    if (now - lastTapRef.current < DOUBLE_TAP_DELAY) {
+    const DOUBLE_TAP_DELAY = 450;
+    if (now - lastTapRef.current < DOUBLE_TAP_DELAY && now - lastTapRef.current > 50) {
       if (onOpenAdmin) {
         onOpenAdmin();
       }
+      lastTapRef.current = 0;
+      return;
     }
     lastTapRef.current = now;
   };
 
-  // Double click handler for desktop mice
   const handleDoubleClick = () => {
     if (onOpenAdmin) {
       onOpenAdmin();
@@ -253,7 +252,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenAdmin }) => {
 
         </div>
 
-        {/* Bottom Bar: Copyright, Admin Button & Back to Top */}
+        {/* Bottom Bar: Copyright & Back to Top */}
         <div className="pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
           <p className="text-slate-500 flex items-center flex-wrap gap-1">
             <span>© {content.brand.year}</span>
@@ -261,30 +260,18 @@ export const Footer: React.FC<FooterProps> = ({ onOpenAdmin }) => {
             <button
               type="button"
               id="footer-last-sirinbuilds-btn"
-              onClick={handleDoubleClick}
+              onClick={handleTap}
               onDoubleClick={handleDoubleClick}
-              onTouchEnd={handleTouchEnd}
+              onTouchEnd={handleTap}
               title="Double tap or double click to open Admin Panel"
-              className="font-bold text-slate-900 hover:text-teal-700 transition-colors cursor-pointer px-1 py-0.5 rounded hover:bg-slate-200/60 active:scale-95 inline-flex items-center gap-1 focus:outline-none"
+              className="font-bold text-slate-900 hover:text-teal-700 transition-colors cursor-pointer px-1 py-0.5 rounded hover:bg-slate-200/60 active:scale-95 inline-flex items-center gap-1 focus:outline-none select-none"
             >
               <span>{content.brand.name}</span>
             </button>
             <span>. All rights reserved. {content.brand.tagline}.</span>
           </p>
 
-          <div className="flex flex-wrap items-center gap-3 sm:gap-5">
-            {/* Dedicated Admin Panel Trigger Button */}
-            <button
-              type="button"
-              id="footer-admin-panel-btn"
-              onClick={onOpenAdmin}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-teal-300 hover:text-teal-200 text-xs font-semibold shadow-sm transition-all border border-slate-800 hover:border-teal-500/40"
-              title="Open SirinBuilds Content Admin Panel"
-            >
-              <Sliders className="w-3.5 h-3.5 text-teal-400" />
-              <span>Admin Panel</span>
-            </button>
-
+          <div className="flex items-center gap-4">
             <button
               onClick={scrollToTop}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-slate-900 hover:border-slate-300 transition-colors shadow-sm font-medium"
