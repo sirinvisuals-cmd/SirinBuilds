@@ -14,13 +14,27 @@ import { ContactSection } from './components/ContactSection';
 import { CtaBanner } from './components/CtaBanner';
 import { Footer } from './components/Footer';
 import { ProjectQuoteModal } from './components/ProjectQuoteModal';
+import { AdminPanel } from './components/AdminPanel';
 
 export default function App() {
   const [activeSection, setActiveSection] = useState<string>('home');
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState<boolean>(false);
+  const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
   const [selectedPackageId, setSelectedPackageId] = useState<string>('professional');
   const [selectedServiceTitle, setSelectedServiceTitle] = useState<string>('');
   const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
+
+  // Keyboard shortcut listener (Alt + A or Ctrl + Shift + A to open Admin Panel)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.altKey && (e.key === 'a' || e.key === 'A')) || (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a'))) {
+        e.preventDefault();
+        setIsAdminOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // Scroll spy to update active navigation state
   useEffect(() => {
@@ -130,8 +144,11 @@ export default function App() {
         />
       </main>
 
-      {/* Footer */}
-      <Footer onSelectPackage={handleOpenQuoteModal} />
+      {/* Footer with double tap & button triggers */}
+      <Footer
+        onSelectPackage={handleOpenQuoteModal}
+        onOpenAdmin={() => setIsAdminOpen(true)}
+      />
 
       {/* Interactive Project Quote / Estimate Modal */}
       <ProjectQuoteModal
@@ -140,6 +157,13 @@ export default function App() {
         initialPackageId={selectedPackageId}
         initialAddOns={selectedAddOns}
       />
+
+      {/* Content Admin Panel Modal */}
+      <AdminPanel
+        isOpen={isAdminOpen}
+        onClose={() => setIsAdminOpen(false)}
+      />
     </div>
   );
 }
+
